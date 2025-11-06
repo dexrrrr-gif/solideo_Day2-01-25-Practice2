@@ -48,6 +48,38 @@ const transportNames = {
     walk: "도보"
 };
 
+// 교통수단별 아이콘 매핑
+const transportIcons = {
+    public: "🚇",
+    car: "🚗",
+    taxi: "🚕",
+    walk: "🚶"
+};
+
+// 교통수단별 비용 (기본 거리 100km 기준)
+const transportCosts = {
+    public: {
+        base: 15000,        // 대중교통 기본 요금
+        perKm: 50,          // km당 추가 요금
+        name: "대중교통 요금"
+    },
+    car: {
+        base: 10000,        // 주차비 등
+        perKm: 150,         // 주유비 (km당)
+        name: "자동차 (주유비 + 주차비)"
+    },
+    taxi: {
+        base: 3800,         // 기본 요금
+        perKm: 1000,        // km당 요금
+        name: "택시 요금"
+    },
+    walk: {
+        base: 0,
+        perKm: 0,
+        name: "도보 (무료)"
+    }
+};
+
 // 폼 제출 처리
 document.getElementById('travelForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -68,8 +100,14 @@ document.getElementById('travelForm').addEventListener('submit', function(e) {
     // 결과 섹션 표시
     document.getElementById('results').style.display = 'block';
 
+    // 경로 시각화 표시
+    displayRouteVisualization(departure, arrival, transport);
+
     // 여행 경로 정보 표시
     displayRouteInfo(departure, arrival, departureDate, arrivalDate, transport);
+
+    // 여행 경비 표시
+    displayTravelCost(transport, departureDate, arrivalDate);
 
     // 식사 추천 표시
     displayMealRecommendations();
@@ -83,6 +121,106 @@ document.getElementById('travelForm').addEventListener('submit', function(e) {
     // 결과로 스크롤
     document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
 });
+
+// 경로 시각화 표시
+function displayRouteVisualization(departure, arrival, transport) {
+    const routeViz = document.getElementById('routeVisualization');
+
+    routeViz.innerHTML = `
+        <div class="route-point">
+            <div class="route-point-circle departure">📍</div>
+            <div class="route-point-label">${departure}</div>
+        </div>
+        <div class="route-line-container">
+            <div class="route-line"></div>
+            <div class="route-transport-icon">${transportIcons[transport]}</div>
+        </div>
+        <div class="route-point">
+            <div class="route-point-circle arrival">🎯</div>
+            <div class="route-point-label">${arrival}</div>
+        </div>
+    `;
+}
+
+// 여행 경비 계산 및 표시
+function displayTravelCost(transport, departureDate, arrivalDate) {
+    const costDiv = document.getElementById('travelCost');
+
+    // 거리 계산 (임의로 100-300km 사이로 설정)
+    const distance = Math.floor(Math.random() * 200) + 100;
+
+    // 교통비 계산
+    const transportCost = transportCosts[transport];
+    const totalTransportCost = transportCost.base + (distance * transportCost.perKm);
+
+    // 평균 식사비 (하루 3끼 기준)
+    const dailyMealCost = 30000;
+
+    // 여행 일수 계산
+    const depDate = new Date(departureDate);
+    const arrDate = new Date(arrivalDate);
+    const days = Math.ceil((arrDate - depDate) / (1000 * 60 * 60 * 24));
+    const mealCost = dailyMealCost * Math.max(1, days);
+
+    // 숙박비 (밤 도착시만)
+    const arrHour = arrDate.getHours();
+    const needAccommodation = arrHour >= 18 || arrHour < 6;
+    const accommodationCost = needAccommodation ? 80000 * Math.max(1, days) : 0;
+
+    // 총 예상 경비
+    const totalCost = totalTransportCost + mealCost + accommodationCost;
+
+    let html = `
+        <div class="cost-summary">
+            <div class="cost-item">
+                <div class="cost-item-label">총 예상 경비</div>
+                <div class="cost-item-value">${totalCost.toLocaleString()}원</div>
+            </div>
+            <div class="cost-item">
+                <div class="cost-item-label">교통비</div>
+                <div class="cost-item-value">${totalTransportCost.toLocaleString()}원</div>
+            </div>
+            <div class="cost-item">
+                <div class="cost-item-label">식사비</div>
+                <div class="cost-item-value">${mealCost.toLocaleString()}원</div>
+            </div>
+            ${needAccommodation ? `
+            <div class="cost-item">
+                <div class="cost-item-label">숙박비</div>
+                <div class="cost-item-value">${accommodationCost.toLocaleString()}원</div>
+            </div>
+            ` : ''}
+        </div>
+
+        <div class="cost-breakdown">
+            <h4>💳 상세 비용 내역</h4>
+            <div class="cost-detail">
+                <span class="cost-detail-label">${transportCost.name}</span>
+                <span class="cost-detail-value">${totalTransportCost.toLocaleString()}원</span>
+            </div>
+            <div class="cost-detail">
+                <span class="cost-detail-label">예상 이동 거리</span>
+                <span class="cost-detail-value">${distance}km</span>
+            </div>
+            <div class="cost-detail">
+                <span class="cost-detail-label">식사비 (${Math.max(1, days)}일)</span>
+                <span class="cost-detail-value">${mealCost.toLocaleString()}원</span>
+            </div>
+            ${needAccommodation ? `
+            <div class="cost-detail">
+                <span class="cost-detail-label">숙박비 (${Math.max(1, days)}박)</span>
+                <span class="cost-detail-value">${accommodationCost.toLocaleString()}원</span>
+            </div>
+            ` : ''}
+            <div class="cost-detail" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 15px;">
+                <span class="cost-detail-label" style="font-weight: 700; color: #667eea;">총계</span>
+                <span class="cost-detail-value" style="font-size: 1.3em; color: #667eea;">${totalCost.toLocaleString()}원</span>
+            </div>
+        </div>
+    `;
+
+    costDiv.innerHTML = html;
+}
 
 // 여행 경로 정보 표시
 function displayRouteInfo(departure, arrival, departureDate, arrivalDate, transport) {
