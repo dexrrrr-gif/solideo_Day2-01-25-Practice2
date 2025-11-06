@@ -278,21 +278,227 @@ footer {
     padding: 20px;
 }
 
+/* 태블릿 레이아웃 */
 @media (max-width: 768px) {
-    .transport-options {
-        grid-template-columns: repeat(2, 1fr);
+    body {
+        padding: 10px;
     }
 
-    .form-row {
-        grid-template-columns: 1fr;
+    .container {
+        border-radius: 15px;
+    }
+
+    header {
+        padding: 30px 20px;
     }
 
     header h1 {
         font-size: 2em;
     }
 
+    header p {
+        font-size: 1em;
+    }
+
+    main {
+        padding: 25px 20px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .transport-options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .transport-option span {
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    .route-detail {
+        grid-template-columns: 120px 1fr;
+        font-size: 0.95em;
+    }
+
     .meal-grid,
     .attraction-grid {
         grid-template-columns: 1fr;
+    }
+
+    .result-card {
+        padding: 20px 15px;
+    }
+
+    /* 테이블을 카드 형식으로 변환 */
+    .accommodation-table {
+        font-size: 0.9em;
+    }
+
+    .accommodation-table thead {
+        display: none;
+    }
+
+    .accommodation-table,
+    .accommodation-table tbody,
+    .accommodation-table tr,
+    .accommodation-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .accommodation-table tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .accommodation-table td {
+        text-align: right;
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .accommodation-table td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 12px;
+        font-weight: 600;
+        color: #667eea;
+        text-align: left;
+    }
+
+    .accommodation-table td:last-child {
+        border-bottom: none;
+    }
+}
+
+/* 모바일 레이아웃 */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        border-radius: 10px;
+    }
+
+    header {
+        padding: 25px 15px;
+    }
+
+    header h1 {
+        font-size: 1.6em;
+    }
+
+    header p {
+        font-size: 0.9em;
+    }
+
+    main {
+        padding: 20px 15px;
+    }
+
+    h2 {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"] {
+        padding: 10px;
+        font-size: 0.95em;
+    }
+
+    .transport-options {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .transport-option span {
+        padding: 12px;
+        font-size: 0.95em;
+    }
+
+    .submit-btn {
+        padding: 12px;
+        font-size: 1.1em;
+    }
+
+    .results-section {
+        margin-top: 30px;
+        padding-top: 30px;
+    }
+
+    .result-card {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .result-card h3 {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+
+    .route-detail {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .route-detail:last-child {
+        border-bottom: none;
+    }
+
+    .meal-item,
+    .attraction-item {
+        padding: 15px;
+    }
+
+    .meal-item h4,
+    .attraction-item h4 {
+        font-size: 1.1em;
+    }
+
+    .accommodation-table {
+        font-size: 0.85em;
+    }
+
+    .accommodation-table td {
+        padding: 10px;
+    }
+
+    footer {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+}
+
+/* 작은 모바일 화면 */
+@media (max-width: 360px) {
+    header h1 {
+        font-size: 1.4em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .result-card h3 {
+        font-size: 1.1em;
     }
 }

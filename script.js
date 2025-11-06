@@ -196,11 +196,11 @@ function displayAccommodations(arrivalDate) {
         travelData.accommodations.forEach(acc => {
             html += `
                 <tr>
-                    <td><strong>${acc.name}</strong></td>
-                    <td>${acc.type}</td>
-                    <td>${acc.price}</td>
-                    <td>⭐ ${acc.rating}</td>
-                    <td>${acc.distance}</td>
+                    <td data-label="숙소명"><strong>${acc.name}</strong></td>
+                    <td data-label="유형">${acc.type}</td>
+                    <td data-label="가격">${acc.price}</td>
+                    <td data-label="평점">⭐ ${acc.rating}</td>
+                    <td data-label="거리">${acc.distance}</td>
                 </tr>
             `;
         });
